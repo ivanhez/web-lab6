@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Beer Blog</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        --d: 3px;
+        background: radial-gradient(
+            circle at var(--d) var(--d),
+            #cacaca calc(var(--d) - 1px),
+            #0000 var(--d)
+          )
+          0 0 / 50px 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // Header component
+      const Header = () => {
+        const styles = {
+          height: "100px",
+          fontWeight: "bold",
+          boxSizing: "border-box",
+          padding: "20px 10px",
+          fontSize: "60px",
+          fontFamily: "monospace",
+          borderBottom: "1px solid",
+          width: "100%",
+          color: "white",
+          textAlign: "center",
+          webkitTextStrokeWidth: "2px",
+          webkitTextStrokeColor: "black",
+        };
+        return <header style={styles}>THE BEER BLOG</header>;
+      };
+
+      // Footer component
+      const Footer = () => {
+        const styles = {
+          height: "100px",
+          boxSizing: "border-box",
+          padding: "20px 10px",
+          fontSize: "12px",
+          fontFamily: "monospace",
+          borderTop: "1px solid",
+          background: "black",
+          width: "100%",
+        };
+        return <footer style={styles}></footer>;
+      };
+
+      // Single post component
+      const Post = ({
+        key,
+        name,
+        type,
+        brewery,
+        abv,
+        ibu,
+        flavors,
+        info,
+        photo,
+      }) => {
+        return (
+          <li>
+            <div key={key} className="post">
+              <h2>{name}</h2>
+              <h3>{type}</h3>
+              <h3>
+                ABV: {abv}% IBU: {ibu}
+              </h3>
+              <p>{info}</p>
+              <img src={photo} alt={name} />
+              <p>Flavors: {flavors}</p>
+            </div>
+          </li>
+        );
+      };
+
+      // Posts component
+      const Posts = () => {
+        const styles = {
+          flexGrow: "1",
+          flexBasis: "0",
+          display: "flex",
+          overflowY: "auto",
+          width: "500px",
+          flexDirection: "column",
+          listStyle: "none",
+        };
+
+        const [posts, setPosts] = React.useState([]);
+
+        const getPosts = async () => {
+          const apiResponse = await fetch(
+            "https://api.tiburoncin.lat/15177/posts"
+          );
+          const jsonPosts = await apiResponse.json();
+          const arrPosts = await jsonPosts.data;
+          const formattedPosts = await arrPosts.map(
+            ({
+              id,
+              beer_name,
+              beer_type,
+              flavors,
+              abv,
+              ibu,
+              brewery,
+              info,
+              photo,
+            }) => ({
+              key: id,
+              name: beer_name,
+              type: beer_type,
+              flavors: flavors,
+              abv: abv,
+              ibu: ibu,
+              brewery: brewery,
+              info: info,
+              photo: photo,
+            })
+          );
+          setPosts(formattedPosts);
+        };
+
+        React.useEffect(() => {
+          getPosts();
+        }, []);
+
+        if (posts.length === 0) {
+          return (
+            <ul>
+              <li>Loading...</li>
+            </ul>
+          );
+        }
+        return (
+          <ul style={styles}>
+            {posts.map(
+              ({
+                key,
+                name,
+                type,
+                brewery,
+                abv,
+                ibu,
+                flavors,
+                info,
+                photo,
+              }) => (
+                <Post
+                  key={key}
+                  name={name}
+                  type={type}
+                  brewery={brewery}
+                  abv={abv}
+                  ibu={ibu}
+                  flavors={flavors}
+                  info={info}
+                  photo={photo}
+                />
+              )
+            )}
+          </ul>
+        );
+      };
+
+      // Button component that increments the count
+      const Button = ({ incrementCount }) => {
+        return <button onClick={incrementCount}>Click Me!</button>;
+      };
+
+      // CounterDisplay component that displays the count
+      const CounterDisplay = ({ count }) => {
+        return <div className="counter">Button Pressed: {count} times</div>;
+      };
+
+      // ReactRoot component as the root component
+      const ReactRoot = () => {
+        const [count, setCount] = React.useState(0);
+
+        // Function to increment the count
+        const incrementCount = () => setCount(count + 1);
+        // Main styles
+        const styles = {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          width: "100vw",
+          flexDirection: "column",
+        };
+        return (
+          <main style={styles}>
+            <Header />
+            <Posts />
+            <Footer />
+          </main>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<ReactRoot />);
+    </script>
+  </body>
+</html>
