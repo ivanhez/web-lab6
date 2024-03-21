@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Beer Blog</title>
+    <title>Cant' believe it's beer!</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -42,16 +42,16 @@
           width: "100%",
           color: "white",
           textAlign: "center",
-          webkitTextStrokeWidth: "2px",
-          webkitTextStrokeColor: "black",
+          WebkitTextStrokeWidth: "2px",
+          WebkitTextStrokeColor: "black",
         };
-        return <header style={styles}>THE BEER BLOG</header>;
+        return <header style={styles}>Cant' believe it's beer!</header>;
       };
 
       // Footer component
       const Footer = () => {
         const styles = {
-          height: "100px",
+          height: "80px",
           boxSizing: "border-box",
           padding: "20px 10px",
           fontSize: "12px",
@@ -119,7 +119,7 @@
           flexGrow: "1",
           flexBasis: "0",
           display: "flex",
-          overflowY: "auto",
+          // overflowY: "auto",
           width: "80%",
           flexDirection: "column",
           listStyle: "none",
@@ -201,23 +201,7 @@
         );
       };
 
-      // Button component that increments the count
-      const Button = ({ incrementCount }) => {
-        return <button onClick={incrementCount}>Click Me!</button>;
-      };
-
-      // CounterDisplay component that displays the count
-      const CounterDisplay = ({ count }) => {
-        return <div className="counter">Button Pressed: {count} times</div>;
-      };
-
-      // ReactRoot component as the root component
       const ReactRoot = () => {
-        const [count, setCount] = React.useState(0);
-
-        // Function to increment the count
-        const incrementCount = () => setCount(count + 1);
-        // Main styles
         const styles = {
           display: "flex",
           justifyContent: "center",
@@ -237,6 +221,7 @@
         );
       };
 
+      
       const root = ReactDOM.createRoot(document.getElementById("root"));
       root.render(<ReactRoot />);
     </script>
